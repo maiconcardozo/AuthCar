@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="AuthCar.API/AuthCar.API.csproj" />
+  <Project Path="AuthCar.Application/AuthCar.Application.csproj" />
+  <Project Path="AuthCar.Domain/AuthCar.Domain.csproj" />
+  <Project Path="AuthCar.Infrastructure/AuthCar.Infrastructure.csproj" />
+  <Project Path="AuthCar.Shared/AuthCar.Shared.csproj" />
+</Solution>
