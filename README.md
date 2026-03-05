@@ -268,13 +268,16 @@ AuthCar/
 
 ---
 
-## Possíveis Evoluções: Claims/Roles e Soft Delete
+## Possíveis Evoluções: Claims/Roles, Soft Delete e Internacionalização
 
 **Claims/Roles no JWT:**
 Para adicionar controle de acesso por perfil (roles) e claims, basta incluir as informações de perfil do usuário (ex: `role: admin`, `role: user`) no token JWT gerado durante o login. Os endpoints protegidos podem ser configurados para exigir determinados roles usando `[Authorize(Roles = "Admin")]` ou validação customizada. A estrutura do projeto já está adaptada para receber claims/roles, bastando implementar a lógica de atribuição e validação conforme a necessidade.
 
 **Soft Delete:**
 Para implementar soft delete nas entidades, basta adicionar um campo como `IsDeleted` (boolean) ou `DeletedAt` (DateTime?) nas entidades do domínio. Ao invés de remover o registro do banco, basta marcar o campo como verdadeiro ou preencher a data de exclusão. Os repositórios e queries devem ser ajustados para filtrar apenas registros não excluídos (`IsDeleted == false`). Essa abordagem preserva o histórico e facilita auditoria, sem perder dados importantes.
+
+**Internacionalização (i18n) com Resources:**
+Uma evolução interessante seria implementar suporte a múltiplos idiomas na aplicação, utilizando arquivos de resource (`.resx`) para mensagens, validações e respostas da API. Isso permite adaptar o sistema para diferentes públicos, melhorando a experiência do usuário e tornando o projeto pronto para uso global.
 
 ---
 
