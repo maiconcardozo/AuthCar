@@ -6,7 +6,7 @@ namespace AuthCar.Application.Commands.Veiculo
 {
     public class UpdateVeiculoCommand : IRequest<VeiculoResponseDTO>
     {
-        public Guid Id { get; set; }
+        public Guid Codigo { get; set; }
         public string Descricao { get; set; } = string.Empty;
         public Marca Marca { get; set; }
         public string Modelo { get; set; } = string.Empty;

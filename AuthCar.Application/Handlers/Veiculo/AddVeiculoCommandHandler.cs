@@ -26,8 +26,10 @@ namespace AuthCar.Application.Handlers
                 Valor = request.Valor
             };
 
-            await _unitOfWork.VeiculoRepository.AddAsync(veiculo);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                await _unitOfWork.VeiculoRepository.AddAsync(veiculo);
+            });
 
             return AuthenticationLoginProfileMapperInitializer.Mapper.Map<VeiculoResponseDTO>(veiculo);
         }

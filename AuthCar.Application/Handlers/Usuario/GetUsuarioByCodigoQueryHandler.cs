@@ -7,18 +7,18 @@ using MediatR;
 
 namespace AuthCar.Application.Handlers
 {
-    public class GetUsuarioByIdQueryHandler : IRequestHandler<GetUsuarioByIdQuery, UsuarioResponseDTO>
+    public class GetUsuarioByCodigoQueryHandler : IRequestHandler<GetUsuarioByCodigoQuery, UsuarioResponseDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetUsuarioByIdQueryHandler(IUnitOfWork unitOfWork)
+        public GetUsuarioByCodigoQueryHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<UsuarioResponseDTO> Handle(GetUsuarioByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UsuarioResponseDTO> Handle(GetUsuarioByCodigoQuery request, CancellationToken cancellationToken)
         {
-            var usuario = await _unitOfWork.UsuarioRepository.GetByIdAsync(request.Id);
+            var usuario = await _unitOfWork.UsuarioRepository.GetByCodigoAsync(request.Codigo);
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 

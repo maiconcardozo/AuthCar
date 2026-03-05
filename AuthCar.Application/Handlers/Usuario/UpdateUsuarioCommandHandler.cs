@@ -18,7 +18,7 @@ namespace AuthCar.Application.Handlers
 
         public async Task<UsuarioResponseDTO> Handle(UpdateUsuarioCommand request, CancellationToken cancellationToken)
         {
-            var usuario = await _unitOfWork.UsuarioRepository.GetByIdAsync(request.Id);
+            var usuario = await _unitOfWork.UsuarioRepository.GetByCodigoAsync(request.Codigo);
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 
@@ -26,8 +26,10 @@ namespace AuthCar.Application.Handlers
             usuario.Login = request.Login;
             usuario.Senha = request.Senha;
 
-            await _unitOfWork.UsuarioRepository.UpdateAsync(usuario);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                await _unitOfWork.UsuarioRepository.UpdateAsync(usuario);
+            });
 
             return AuthenticationLoginProfileMapperInitializer.Mapper.Map<UsuarioResponseDTO>(usuario);
         }
