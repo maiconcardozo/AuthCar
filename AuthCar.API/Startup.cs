@@ -63,19 +63,6 @@ namespace AuthCar.API
             services.Configure<JwtSettings>(builder.GetSection("JwtSettings"));
             services.AddSingleton<IJwtSettings>(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
 
-            // =========================================
-            // LOCALIZATION
-            // =========================================
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                var supportedCultures = new[] { "en", "pt-BR" };
-                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(supportedCultures[0]);
-                options.SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
-                options.SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
-            });
-
-
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("AuthCarDb"));
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IVeiculoRepository, VeiculoRepository>();
