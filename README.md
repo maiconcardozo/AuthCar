@@ -31,7 +31,7 @@ A arquitetura do projeto é inspirada em princípios de **DDD (Domain-Driven Des
 - A camada `Infra` implementa persistência e repositórios, separando detalhes técnicos do domínio.
 - A camada `WebApi` expõe apenas endpoints HTTP, sem lógica de negócio.
 
-Embora não implemente todos os padrões avançados de DDD (como Aggregates, Value Objects, Domain Events), a estrutura está adaptada para fácil evolução e segue boas práticas de separação de responsabilidades.
+Embora não implemente todos os padrões avançados de DDD (como Aggregates, Domain Events), a estrutura está adaptada para fácil evolução e segue boas práticas de separação de responsabilidades.
 
 Além disso, o projeto utiliza o padrão **RCBA (Request-Command-Behavior-Action)** através do MediatR:
 - Cada requisição HTTP é convertida em um Command ou Query, tratado por um Handler específico.
