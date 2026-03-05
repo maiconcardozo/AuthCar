@@ -86,11 +86,11 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid codigo)
         {
             try
             {
-                var result = await _mediator.Send(new GetUsuarioByIdQuery { Id = id });
+                var result = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });
 
                 if (result == null)
                 {
@@ -193,7 +193,7 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UsuarioRequestDTO usuarioDto, [FromServices] IServiceProvider serviceProvider)
+        public async Task<IActionResult> Update(Guid codigo, [FromBody] UsuarioRequestDTO usuarioDto, [FromServices] IServiceProvider serviceProvider)
         {
             var validationResult = await ValidationHelper.ValidateEntityAsync(usuarioDto, serviceProvider, this);
             if (validationResult != null) return validationResult;
@@ -202,7 +202,7 @@ namespace AuthCar.API.Controllers
             {
                 var command = new UpdateUsuarioCommand
                 {
-                    Id = id,
+                    Codigo = codigo,
                     Nome = usuarioDto.Nome,
                     Login = usuarioDto.Login,
                     Senha = usuarioDto.Senha
@@ -250,19 +250,18 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid codigo)
         {
             try
             {
-                var existingUsuario = await _mediator.Send(new GetUsuarioByIdQuery { Id = id });
-
+                var existingUsuario = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });
                 if (existingUsuario == null)
                 {
                     var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Usuário não encontrado.", HttpContext.Request.Path);
                     return NotFound(notFoundDetails);
                 }
 
-                await _mediator.Send(new DeleteUsuarioCommand { Id = id });
+                await _mediator.Send(new DeleteUsuarioCommand { Codigo = codigo });
 
                 var successResponse = new SucessDetails
                 {

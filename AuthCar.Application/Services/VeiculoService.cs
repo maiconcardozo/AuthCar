@@ -15,7 +15,7 @@ namespace AuthCar.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public Task<Veiculo?> GetByIdAsync(Guid id) => _veiculoRepository.GetByIdAsync(id);
+        public Task<Veiculo?> GetByCodigoAsync(Guid codigo) => _veiculoRepository.GetByCodigoAsync(codigo);
 
         public Task<IEnumerable<Veiculo>> ListAsync() => _veiculoRepository.ListAsync();
 

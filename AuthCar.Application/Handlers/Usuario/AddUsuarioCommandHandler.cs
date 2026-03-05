@@ -30,8 +30,10 @@ namespace AuthCar.Application.Handlers
                 Senha = request.Senha
             };
 
-            await _unitOfWork.UsuarioRepository.AddAsync(usuario);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                await _unitOfWork.UsuarioRepository.AddAsync(usuario);
+            });
 
             return AuthenticationLoginProfileMapperInitializer.Mapper.Map<UsuarioResponseDTO>(usuario);
         }

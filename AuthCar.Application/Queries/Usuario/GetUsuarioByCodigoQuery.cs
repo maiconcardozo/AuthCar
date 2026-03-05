@@ -5,8 +5,8 @@ using System;
 
 namespace AuthCar.Application.Queries
 {
-    public class GetUsuarioByIdQuery : IRequest<UsuarioResponseDTO>
+    public class GetUsuarioByCodigoQuery : IRequest<UsuarioResponseDTO>
     {
-        public Guid Id { get; set; }
+        public Guid Codigo { get; set; }
     }
 }

@@ -7,18 +7,18 @@ using MediatR;
 
 namespace AuthCar.Application.Handlers
 {
-    public class GetVeiculoByIdQueryHandler : IRequestHandler<GetVeiculoByIdQuery, VeiculoResponseDTO>
+    public class GetVeiculoByCodigoQueryHandler : IRequestHandler<GetVeiculoByCodigoQuery, VeiculoResponseDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetVeiculoByIdQueryHandler(IUnitOfWork unitOfWork)
+        public GetVeiculoByCodigoQueryHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<VeiculoResponseDTO> Handle(GetVeiculoByIdQuery request, CancellationToken cancellationToken)
+        public async Task<VeiculoResponseDTO> Handle(GetVeiculoByCodigoQuery request, CancellationToken cancellationToken)
         {
-            var veiculo = await _unitOfWork.VeiculoRepository.GetByIdAsync(request.Id);
+            var veiculo = await _unitOfWork.VeiculoRepository.GetByCodigoAsync(request.Codigo);
             if (veiculo == null)
                 throw new NotFoundException("Veículo não encontrado.");
 

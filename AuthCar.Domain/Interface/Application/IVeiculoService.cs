@@ -4,10 +4,10 @@ namespace AuthCar.Domain.Interface.Application
 {
     public interface IVeiculoService
     {
-        Task<Veiculo?> GetByIdAsync(Guid id);
+        Task<Veiculo?> GetByCodigoAsync(Guid codigo);
         Task<IEnumerable<Veiculo>> ListAsync();
         Task AddAsync(Veiculo veiculo);
         Task UpdateAsync(Veiculo veiculo);
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(Guid codigo);
     }
 }

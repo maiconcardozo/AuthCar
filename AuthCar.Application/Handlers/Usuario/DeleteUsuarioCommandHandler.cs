@@ -16,12 +16,14 @@ namespace AuthCar.Application.Handlers
 
         public async Task<Unit> Handle(DeleteUsuarioCommand request, CancellationToken cancellationToken)
         {
-            var usuario = await _unitOfWork.UsuarioRepository.GetByIdAsync(request.Id).ConfigureAwait(false);
+            var usuario = await _unitOfWork.UsuarioRepository.GetByCodigoAsync(request.Codigo).ConfigureAwait(false);
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 
-            _unitOfWork.UsuarioRepository.Remove(usuario);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                _unitOfWork.UsuarioRepository.Remove(usuario);
+            });
 
             return Unit.Value;
         }

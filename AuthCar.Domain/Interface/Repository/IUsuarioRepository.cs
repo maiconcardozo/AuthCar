@@ -5,11 +5,11 @@ namespace AuthCar.Domain.Interface.Repository
 {
     public interface IUsuarioRepository : IEntityRepository<Usuario>
     {
-        Task<Usuario?> GetByIdAsync(Guid id);
+        Task<Usuario?> GetByCodigoAsync(Guid codigo);
         Task<Usuario?> GetByLoginAsync(string login);
         Task<IEnumerable<Usuario>> ListAsync();
         Task AddAsync(Usuario usuario);
         Task UpdateAsync(Usuario usuario);
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(Guid codigo);
     }
 }

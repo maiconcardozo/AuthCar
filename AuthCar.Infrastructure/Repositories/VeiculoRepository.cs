@@ -10,19 +10,9 @@ namespace AuthCar.Infrastructure.Repositories
     {
         private readonly AppDbContext _context;
 
-        public VeiculoRepository(AppDbContext context)
+        public void Add(Veiculo entity)
         {
-            _context = context;
-        }
-
-        public async Task<Veiculo?> GetByIdAsync(Guid id)
-        {
-            return await _context.Veiculos.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Veiculo>> ListAsync()
-        {
-            return await _context.Veiculos.ToListAsync();
+            _context.Veiculos.Add(entity);
         }
 
         public Task AddAsync(Veiculo veiculo)
@@ -31,114 +21,124 @@ namespace AuthCar.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public Task UpdateAsync(Veiculo veiculo)
+        public void AddRange(IEnumerable<Veiculo> lstEntity)
         {
-            _context.Veiculos.Update(veiculo);
-            return Task.CompletedTask;
+            _context.Veiculos.AddRange(lstEntity);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var veiculo = await GetByIdAsync(id);
+            var veiculo = await _context.Veiculos.FindAsync(id);
             if (veiculo != null)
             {
                 _context.Veiculos.Remove(veiculo);
             }
         }
 
+        public IEnumerable<Veiculo> Find(Expression<Func<Veiculo, bool>> predicate)
+        {
+            return _context.Veiculos.Where(predicate).ToList();
+        }
+
+        public async Task<IEnumerable<Veiculo>> FindAsync(Expression<Func<Veiculo, bool>> predicate)
+        {
+            return await _context.Veiculos.Where(predicate).ToListAsync();
+        }
+
         public Veiculo? Get(Veiculo entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Veiculo?> GetAsync(Veiculo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Veiculo> GetByLstId(Veiculo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Veiculo>> GetByLstIdAsync(Veiculo entity)
-        {
-            throw new NotImplementedException();
+            return _context.Veiculos.FirstOrDefault(v => v.Id == entity.Id);
         }
 
         public IEnumerable<Veiculo> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Veiculos.ToList();
         }
 
-        public Task<IEnumerable<Veiculo>> GetAllAsync()
+        public async Task<IEnumerable<Veiculo>> GetAllAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Veiculo> Find(Expression<Func<Veiculo, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Veiculo>> FindAsync(Expression<Func<Veiculo, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Veiculo? SingleOrDefault(Expression<Func<Veiculo, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Veiculo?> SingleOrDefaultAsync(Expression<Func<Veiculo, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add(Veiculo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddRange(IEnumerable<Veiculo> lstEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(Veiculo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveRange(IEnumerable<Veiculo> lstEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Veiculo? GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Veiculo?> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Veiculo entity)
-        {
-            throw new NotImplementedException();
+            return await _context.Veiculos.ToListAsync();
         }
 
         public IEnumerable<Veiculo> GetAllIncludingDeleted()
         {
-            throw new NotImplementedException();
+            return _context.Veiculos.IgnoreQueryFilters().ToList();
+        }
+
+        public async Task<Veiculo?> GetAsync(Veiculo entity)
+        {
+            return await _context.Veiculos.FirstOrDefaultAsync(v => v.Id == entity.Id);
+        }
+
+        public Task<Veiculo?> GetByCodigoAsync(Guid codigo)
+        {
+            return _context.Veiculos.FirstOrDefaultAsync(v => v.Codigo == codigo);
+        }
+
+        public Veiculo? GetById(int id)
+        {
+            return _context.Veiculos.FirstOrDefault(v => v.Id == id);
+        }
+
+        public async Task<Veiculo?> GetByIdAsync(Guid id)
+        {
+            return await _context.Veiculos.FindAsync(id);
+        }
+
+        public async Task<Veiculo?> GetByIdAsync(int id)
+        {
+            return await _context.Veiculos.FirstOrDefaultAsync(v => v.Id == id);
+        }
+
+        public IEnumerable<Veiculo> GetByLstId(Veiculo entity)
+        {
+            return new List<Veiculo>();
+        }
+
+        public async Task<IEnumerable<Veiculo>> GetByLstIdAsync(Veiculo entity)
+        {
+            return await Task.FromResult(new List<Veiculo>());
         }
 
         public void HardDelete(Veiculo entity)
         {
-            throw new NotImplementedException();
+            _context.Veiculos.Remove(entity);
+        }
+
+        public async Task<IEnumerable<Veiculo>> ListAsync()
+        {
+            return await _context.Veiculos.ToListAsync();
+        }
+
+        public void Remove(Veiculo entity)
+        {
+            _context.Veiculos.Remove(entity);
+        }
+
+        public void RemoveRange(IEnumerable<Veiculo> lstEntity)
+        {
+            _context.Veiculos.RemoveRange(lstEntity);
+        }
+
+        public Veiculo? SingleOrDefault(Expression<Func<Veiculo, bool>> predicate)
+        {
+            return _context.Veiculos.SingleOrDefault(predicate);
+        }
+
+        public async Task<Veiculo?> SingleOrDefaultAsync(Expression<Func<Veiculo, bool>> predicate)
+        {
+            return await _context.Veiculos.SingleOrDefaultAsync(predicate);
+        }
+
+        public void Update(Veiculo entity)
+        {
+            _context.Veiculos.Update(entity);
+        }
+
+        public Task UpdateAsync(Veiculo veiculo)
+        {
+            _context.Veiculos.Update(veiculo);
+            return Task.CompletedTask;
         }
     }
 }

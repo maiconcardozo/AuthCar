@@ -18,7 +18,7 @@ namespace AuthCar.Application.Handlers
 
         public async Task<VeiculoResponseDTO> Handle(UpdateVeiculoCommand request, CancellationToken cancellationToken)
         {
-            var veiculo = await _unitOfWork.VeiculoRepository.GetByIdAsync(request.Id);
+            var veiculo = await _unitOfWork.VeiculoRepository.GetByCodigoAsync(request.Codigo);
             if (veiculo == null)
                 throw new NotFoundException("Veículo não encontrado.");
 
@@ -27,8 +27,10 @@ namespace AuthCar.Application.Handlers
             veiculo.Modelo = request.Modelo;
             veiculo.Valor = request.Valor;
 
-            await _unitOfWork.VeiculoRepository.UpdateAsync(veiculo);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            {
+                await _unitOfWork.VeiculoRepository.UpdateAsync(veiculo);
+            });
 
             return AuthenticationLoginProfileMapperInitializer.Mapper.Map<VeiculoResponseDTO>(veiculo);
         }

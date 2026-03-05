@@ -51,7 +51,7 @@ public class VeiculoController : ControllerBase
             };
 
             var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetVeiculoById), new { id = result.Id }, result);
+            return Ok(result);
         }
         catch (InvalidOperationException ex)
         {
@@ -91,7 +91,7 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
     [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> UpdateVeiculo(Guid id, [FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
+    public async Task<IActionResult> UpdateVeiculo(Guid codigo, [FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
     {
         var validationResult = await ValidationHelper.ValidateEntityAsync(veiculoDto, serviceProvider, this);
         if (validationResult != null)
@@ -101,7 +101,7 @@ public class VeiculoController : ControllerBase
         {
             var command = new UpdateVeiculoCommand
             {
-                Id = id,
+                Codigo = codigo,
                 Descricao = veiculoDto.Descricao,
                 Marca = (AuthCar.Domain.Enums.Marca)veiculoDto.Marca,
                 Modelo = veiculoDto.Modelo,
@@ -149,11 +149,11 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
     [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> DeleteVeiculo(Guid id)
+    public async Task<IActionResult> DeleteVeiculo(Guid codigo)
     {
         try
         {
-            var existingVeiculo = await _mediator.Send(new GetVeiculoByIdQuery { Id = id });
+            var existingVeiculo = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
 
             if (existingVeiculo == null)
             {
@@ -161,7 +161,7 @@ public class VeiculoController : ControllerBase
                 return NotFound(notFoundDetails);
             }
 
-            await _mediator.Send(new DeleteVeiculoCommand { Id = id });
+            await _mediator.Send(new DeleteVeiculoCommand { Codigo = codigo });
 
             var successResponse = new SucessDetails
             {
@@ -209,11 +209,11 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
     [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> GetVeiculoById(Guid id)
+    public async Task<IActionResult> GetVeiculoByCodigo(Guid codigo)
     {
         try
         {
-            var result = await _mediator.Send(new GetVeiculoByIdQuery { Id = id });
+            var result = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
 
             if (result == null)
             {
