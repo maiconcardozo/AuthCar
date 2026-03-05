@@ -27,10 +27,14 @@ namespace AuthCar.Application.Handlers
             veiculo.Modelo = request.Modelo;
             veiculo.Valor = request.Valor;
 
-            await _unitOfWork.ExecuteInTransactionAsync(async () =>
-            {
-                await _unitOfWork.VeiculoRepository.UpdateAsync(veiculo);
-            });
+            await _unitOfWork.VeiculoRepository.UpdateAsync(veiculo);
+            await _unitOfWork.CommitAsync();
+
+            // Alternativamente, se o repositório suportar transações, você pode usar:
+            //await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            //{
+            //    await _unitOfWork.VeiculoRepository.UpdateAsync(veiculo);
+            //});
 
             return AuthenticationLoginProfileMapperInitializer.Mapper.Map<VeiculoResponseDTO>(veiculo);
         }

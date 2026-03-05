@@ -20,10 +20,14 @@ namespace AuthCar.Application.Handlers
             if (veiculo == null)
                 throw new NotFoundException("Veículo não encontrado.");
 
-            await _unitOfWork.ExecuteInTransactionAsync(async () =>
-            {
-                _unitOfWork.VeiculoRepository.Remove(veiculo);
-            });
+            _unitOfWork.VeiculoRepository.Remove(veiculo);
+            await _unitOfWork.CommitAsync();
+
+            // Alternativamente, se o repositório suportar transações, você pode usar:
+            //await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            //{
+            //    _unitOfWork.VeiculoRepository.Remove(veiculo);
+            //});
 
             return Unit.Value;
         }

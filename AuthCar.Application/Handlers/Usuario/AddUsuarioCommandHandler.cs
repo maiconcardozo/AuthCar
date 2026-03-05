@@ -30,10 +30,14 @@ namespace AuthCar.Application.Handlers
                 Senha = request.Senha
             };
 
-            await _unitOfWork.ExecuteInTransactionAsync(async () =>
-            {
-                await _unitOfWork.UsuarioRepository.AddAsync(usuario);
-            });
+            await _unitOfWork.UsuarioRepository.AddAsync(usuario);
+            await _unitOfWork.CommitAsync();
+
+            // Alternativamente, se o repositório suportar transações, você pode usar:
+            //await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            //{
+            //    await _unitOfWork.UsuarioRepository.AddAsync(usuario);
+            //});
 
             return AuthenticationLoginProfileMapperInitializer.Mapper.Map<UsuarioResponseDTO>(usuario);
         }

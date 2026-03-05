@@ -10,6 +10,11 @@ namespace AuthCar.Infrastructure.Repositories
     {
         private readonly AppDbContext _context;
 
+        public VeiculoRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public void Add(Veiculo entity)
         {
             _context.Veiculos.Add(entity);

@@ -9,8 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 
+/// <summary>
+/// Operações relacionadas ao veículo
+/// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("AuthCar/[controller]")]
 public class VeiculoController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -18,6 +21,103 @@ public class VeiculoController : ControllerBase
     public VeiculoController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    /// <summary>
+    /// Retorna todos os veículos cadastrados
+    /// </summary>
+    [HttpGet("GetAllVeiculo")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<VeiculoResponseDTO>))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
+    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
+    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
+    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
+    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
+    public async Task<IActionResult> GetAllVeiculo()
+    {
+        try
+        {
+            var result = await _mediator.Send(new ListVeiculosQuery());
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
+        }
+        catch (InvalidOperationException ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
+            return BadRequest(problemDetails);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
+            return Unauthorized(problemDetails);
+        }
+        catch (ConflictException ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
+            return Conflict(problemDetails);
+        }
+        catch (Exception ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
+            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
+        }
+    }
+
+    /// <summary>
+    /// Retorna um veículo pelo Codigo
+    /// </summary>
+    [HttpGet("GetVeiculoByCodigo/{codigo}")]
+    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(VeiculoResponseDTO))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
+    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
+    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
+    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
+    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
+    public async Task<IActionResult> GetByCodigo(Guid codigo)
+    {
+        try
+        {
+            var result = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
+
+            if (result == null)
+            {
+                var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Veículo não encontrado.", HttpContext.Request.Path);
+                return NotFound(notFoundDetails);
+            }
+
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
+        }
+        catch (InvalidOperationException ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
+            return BadRequest(problemDetails);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
+            return Unauthorized(problemDetails);
+        }
+        catch (ConflictException ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
+            return Conflict(problemDetails);
+        }
+        catch (Exception ex)
+        {
+            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
+            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
+        }
     }
 
     /// <summary>
@@ -34,7 +134,7 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
     [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> AddVeiculo([FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
+    public async Task<IActionResult> Add([FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
     {
         var validationResult = await ValidationHelper.ValidateEntityAsync(veiculoDto, serviceProvider, this);
         if (validationResult != null)
@@ -78,7 +178,7 @@ public class VeiculoController : ControllerBase
     /// <summary>
     /// Atualiza um veículo existente
     /// </summary>
-    [HttpPut("UpdateVeiculo/{id}")]
+    [HttpPut("UpdateVeiculo/{codigo}")]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(VeiculoResponseDTO))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
@@ -91,7 +191,7 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
     [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> UpdateVeiculo(Guid codigo, [FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
+    public async Task<IActionResult> Update(Guid codigo, [FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
     {
         var validationResult = await ValidationHelper.ValidateEntityAsync(veiculoDto, serviceProvider, this);
         if (validationResult != null)
@@ -136,7 +236,7 @@ public class VeiculoController : ControllerBase
     /// <summary>
     /// Exclui um veículo
     /// </summary>
-    [HttpDelete("DeleteVeiculo/{id}")]
+    [HttpDelete("DeleteVeiculo/{codigo}")]
     [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(SucessDetails))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
@@ -149,7 +249,7 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
     [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> DeleteVeiculo(Guid codigo)
+    public async Task<IActionResult> Delete(Guid codigo)
     {
         try
         {
@@ -169,103 +269,6 @@ public class VeiculoController : ControllerBase
                 Data = existingVeiculo,
             };
 
-            return Ok(successResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-            return BadRequest(problemDetails);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-            return Unauthorized(problemDetails);
-        }
-        catch (ConflictException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-            return Conflict(problemDetails);
-        }
-        catch (Exception ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-        }
-    }
-
-    /// <summary>
-    /// Retorna um veículo pelo Id
-    /// </summary>
-    [HttpGet("GetVeiculoById/{id}")]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(VeiculoResponseDTO))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
-    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> GetVeiculoByCodigo(Guid codigo)
-    {
-        try
-        {
-            var result = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
-
-            if (result == null)
-            {
-                var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Veículo não encontrado.", HttpContext.Request.Path);
-                return NotFound(notFoundDetails);
-            }
-
-            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
-            return Ok(successResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-            return BadRequest(problemDetails);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-            return Unauthorized(problemDetails);
-        }
-        catch (ConflictException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-            return Conflict(problemDetails);
-        }
-        catch (Exception ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-        }
-    }
-
-    /// <summary>
-    /// Retorna todos os veículos cadastrados
-    /// </summary>
-    [HttpGet("GetAllVeiculo")]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<VeiculoResponseDTO>))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-    public async Task<IActionResult> GetAllVeiculo()
-    {
-        try
-        {
-            var result = await _mediator.Send(new ListVeiculosQuery());
-            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
             return Ok(successResponse);
         }
         catch (InvalidOperationException ex)

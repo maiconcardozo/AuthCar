@@ -11,6 +11,11 @@ namespace AuthCar.Infrastructure.Repositories
 
         private readonly AppDbContext _context;
 
+        public UsuarioRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public void Add(Usuario entity)
         {
             _context.Usuarios.Add(entity);
@@ -73,7 +78,7 @@ namespace AuthCar.Infrastructure.Repositories
 
         public async Task<Usuario?> GetByCodigoAsync(Guid codigo)
         {
-            return await _context.Usuarios.FindAsync(codigo);
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Codigo == codigo);
         }
 
         public Usuario? GetById(int id)

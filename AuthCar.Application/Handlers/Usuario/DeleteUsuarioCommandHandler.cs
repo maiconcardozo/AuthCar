@@ -20,10 +20,14 @@ namespace AuthCar.Application.Handlers
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 
-            await _unitOfWork.ExecuteInTransactionAsync(async () =>
-            {
-                _unitOfWork.UsuarioRepository.Remove(usuario);
-            });
+            _unitOfWork.UsuarioRepository.Remove(usuario);
+            await _unitOfWork.CommitAsync();
+
+            // Alternativamente, se o repositório suportar transações, você pode usar:
+            //await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            //{
+            //    _unitOfWork.UsuarioRepository.Remove(usuario);
+            //});
 
             return Unit.Value;
         }

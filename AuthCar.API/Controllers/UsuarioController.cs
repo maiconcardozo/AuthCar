@@ -73,7 +73,7 @@ namespace AuthCar.API.Controllers
         /// <summary>
         /// Retorna um usuário pelo Id
         /// </summary>
-        [HttpGet("GetUsuarioById/{id}")]
+        [HttpGet("GetUsuarioByCodigo/{codigo}")]
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UsuarioResponseDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
@@ -86,7 +86,7 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-        public async Task<IActionResult> GetById(Guid codigo)
+        public async Task<IActionResult> GetByCodigo(Guid codigo)
         {
             try
             {
@@ -180,7 +180,7 @@ namespace AuthCar.API.Controllers
         /// <summary>
         /// Atualiza um usuário existente
         /// </summary>
-        [HttpPut("UpdateUsuario/{id}")]
+        [HttpPut("UpdateUsuario/{codigo}")]
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UsuarioResponseDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
@@ -237,7 +237,7 @@ namespace AuthCar.API.Controllers
         /// <summary>
         /// Exclui um usuário
         /// </summary>
-        [HttpDelete("DeleteUsuario/{id}")]
+        [HttpDelete("DeleteUsuario/{codigo}")]
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(SucessDetails))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
