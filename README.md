@@ -256,7 +256,7 @@ AuthCar/
 ├── AuthCar.Application/   # Camada de aplicação (Services, MediatR Handlers)
 ├── AuthCar.Domain/        # Camada de domínio (Entidades, Enums, Interfaces)
 ├── AuthCar.Infra/         # Infraestrutura (DbContext, Repositórios)
-└── Config/                # Arquivos de configuração (.env, etc.)
+└── Authcar.Shared/        # Camada de funções e exceptions compartilhadas
 ```
 
 ---
