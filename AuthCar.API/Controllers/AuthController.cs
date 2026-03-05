@@ -49,7 +49,7 @@ namespace AuthCar.API.Controllers
                 return validationResult;
             }
 
-            var command = new LoginCommand
+            var command = new AuthCommand
             {
                 Login = authRequestDTO.Login,
                 Senha = authRequestDTO.Senha

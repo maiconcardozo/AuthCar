@@ -13,7 +13,7 @@ using System.Text;
 
 namespace AuthCar.Application.Handlers.Auth
 {
-    public class LoginHandler : IRequestHandler<LoginCommand, AuthResponseDTO>
+    public class LoginHandler : IRequestHandler<AuthCommand, AuthResponseDTO>
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IJwtSettings jwtSettings;
@@ -26,7 +26,7 @@ namespace AuthCar.Application.Handlers.Auth
             this.jwtSettings = jwtSettings;
         }
 
-        public async Task<AuthResponseDTO> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<AuthResponseDTO> Handle(AuthCommand request, CancellationToken cancellationToken)
         {
             var usauario = await unitOfWork.UsuarioRepository.GetByLoginAsync(request.Login).ConfigureAwait(false);
 
