@@ -268,7 +268,7 @@ AuthCar/
 
 ---
 
-## Possíveis Evoluções: Claims/Roles, Soft Delete e Internacionalização
+## Possíveis Evoluções
 
 **Claims/Roles no JWT:**
 Para adicionar controle de acesso por perfil (roles) e claims, basta incluir as informações de perfil do usuário (ex: `role: admin`, `role: user`) no token JWT gerado durante o login. Os endpoints protegidos podem ser configurados para exigir determinados roles usando `[Authorize(Roles = "Admin")]` ou validação customizada. A estrutura do projeto já está adaptada para receber claims/roles, bastando implementar a lógica de atribuição e validação conforme a necessidade.
@@ -278,6 +278,9 @@ Para implementar soft delete nas entidades, basta adicionar um campo como `IsDel
 
 **Internacionalização (i18n) com Resources:**
 Uma evolução interessante seria implementar suporte a múltiplos idiomas na aplicação, utilizando arquivos de resource (`.resx`) para mensagens, validações e respostas da API. Isso permite adaptar o sistema para diferentes públicos, melhorando a experiência do usuário e tornando o projeto pronto para uso global.
+
+**Uso de Pepper com Argon2:**
+Para elevar ainda mais a segurança na criptografia de senhas, recomenda-se utilizar um "pepper" — um valor secreto adicional, armazenado em ambiente seguro (ex: variável de ambiente). O pepper é concatenado à senha antes de aplicar o hash Argon2, dificultando ataques mesmo em caso de vazamento do banco de dados. Essa prática é complementar ao uso de salt e fortalece a proteção das credenciais dos usuários.
 
 ---
 
