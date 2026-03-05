@@ -41,32 +41,9 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> GetAllVeiculo()
     {
-        try
-        {
-            var result = await _mediator.Send(new ListVeiculosQuery());
-            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
-            return Ok(successResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-            return BadRequest(problemDetails);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-            return Unauthorized(problemDetails);
-        }
-        catch (ConflictException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-            return Conflict(problemDetails);
-        }
-        catch (Exception ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-        }
+        var result = await _mediator.Send(new ListVeiculosQuery());
+        var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
+        return Ok(successResponse);
     }
 
     /// <summary>
@@ -87,39 +64,16 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> GetByCodigo(Guid codigo)
     {
-        try
-        {
-            var result = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
+        var result = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
 
-            if (result == null)
-            {
-                var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Veículo não encontrado.", HttpContext.Request.Path);
-                return NotFound(notFoundDetails);
-            }
+        if (result == null)
+        {
+            var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Veículo não encontrado.", HttpContext.Request.Path);
+            return NotFound(notFoundDetails);
+        }
 
-            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
-            return Ok(successResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-            return BadRequest(problemDetails);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-            return Unauthorized(problemDetails);
-        }
-        catch (ConflictException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-            return Conflict(problemDetails);
-        }
-        catch (Exception ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-        }
+        var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
+        return Ok(successResponse);
     }
 
     /// <summary>
@@ -142,40 +96,17 @@ public class VeiculoController : ControllerBase
         if (validationResult != null)
             return validationResult;
 
-        try
+        var command = new AddVeiculoCommand
         {
-            var command = new AddVeiculoCommand
-            {
-                Descricao = veiculoDto.Descricao,
-                Marca = (AuthCar.Domain.Enums.Marca)veiculoDto.Marca,
-                Modelo = veiculoDto.Modelo,
-                Valor = veiculoDto.Valor
-            };
+            Descricao = veiculoDto.Descricao,
+            Marca = (AuthCar.Domain.Enums.Marca)veiculoDto.Marca,
+            Modelo = veiculoDto.Modelo,
+            Valor = veiculoDto.Valor
+        };
 
-            var usuario = await _mediator.Send(command);
-            var successResponse = SuccessResponseExampleFactory.ForSuccess(usuario, "Veículo criado com sucesso.", HttpContext.Request.Path);
-            return Ok(successResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-            return BadRequest(problemDetails);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-            return Unauthorized(problemDetails);
-        }
-        catch (ConflictException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-            return Conflict(problemDetails);
-        }
-        catch (Exception ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-        }
+        var usuario = await _mediator.Send(command);
+        var successResponse = SuccessResponseExampleFactory.ForSuccess(usuario, "Veículo criado com sucesso.", HttpContext.Request.Path);
+        return Ok(successResponse);
     }
 
     /// <summary>
@@ -200,40 +131,18 @@ public class VeiculoController : ControllerBase
         if (validationResult != null)
             return validationResult;
 
-        try
+
+        var command = new UpdateVeiculoCommand
         {
-            var command = new UpdateVeiculoCommand
-            {
-                Codigo = codigo,
-                Descricao = veiculoDto.Descricao,
-                Marca = (AuthCar.Domain.Enums.Marca)veiculoDto.Marca,
-                Modelo = veiculoDto.Modelo,
-                Valor = veiculoDto.Valor
-            };
-            var result = await _mediator.Send(command);
-            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Veículo atualizado com sucesso.", HttpContext.Request.Path);
-            return Ok(successResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-            return BadRequest(problemDetails);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-            return Unauthorized(problemDetails);
-        }
-        catch (ConflictException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-            return Conflict(problemDetails);
-        }
-        catch (Exception ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-        }
+            Codigo = codigo,
+            Descricao = veiculoDto.Descricao,
+            Marca = (AuthCar.Domain.Enums.Marca)veiculoDto.Marca,
+            Modelo = veiculoDto.Modelo,
+            Valor = veiculoDto.Valor
+        };
+        var result = await _mediator.Send(command);
+        var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Veículo atualizado com sucesso.", HttpContext.Request.Path);
+        return Ok(successResponse);
     }
 
     /// <summary>
@@ -254,45 +163,22 @@ public class VeiculoController : ControllerBase
     [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> Delete(Guid codigo)
     {
-        try
-        {
-            var existingVeiculo = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
+        var existingVeiculo = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
 
-            if (existingVeiculo == null)
-            {
-                var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Veículo não encontrado.", HttpContext.Request.Path);
-                return NotFound(notFoundDetails);
-            }
+        if (existingVeiculo == null)
+        {
+            var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Veículo não encontrado.", HttpContext.Request.Path);
+            return NotFound(notFoundDetails);
+        }
 
-            await _mediator.Send(new DeleteVeiculoCommand { Codigo = codigo });
+        await _mediator.Send(new DeleteVeiculoCommand { Codigo = codigo });
 
-            var successResponse = new SucessDetails
-            {
-                Detail = "Veículo excluído com sucesso.",
-                Data = existingVeiculo,
-            };
+        var successResponse = new SucessDetails
+        {
+            Detail = "Veículo excluído com sucesso.",
+            Data = existingVeiculo,
+        };
 
-            return Ok(successResponse);
-        }
-        catch (InvalidOperationException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-            return BadRequest(problemDetails);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-            return Unauthorized(problemDetails);
-        }
-        catch (ConflictException ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-            return Conflict(problemDetails);
-        }
-        catch (Exception ex)
-        {
-            var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-            return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-        }
+        return Ok(successResponse);
     }
 }

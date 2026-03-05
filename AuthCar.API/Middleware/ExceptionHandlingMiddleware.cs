@@ -19,26 +19,39 @@ namespace AuthCar.API.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            await next(context);
-
-            if (context.Response.StatusCode != StatusCodes.Status200OK)
+            try
             {
-                ProblemDetails problemDetails = null;
+                await next(context);
+            }
+            catch (InvalidOperationException ex)
+            {
+                logger.LogError(ex, "BadRequest Exception");
+                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForBadRequest(ex.Message, context.Request.Path), StatusCodes.Status400BadRequest);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                logger.LogError(ex, "Unauthorized Exception");
+                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, context.Request.Path), StatusCodes.Status401Unauthorized);
+            }
+            catch (ConflictException ex)
+            {
+                logger.LogError(ex, "Conflict Exception");
+                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForConflict(ex.Message, context.Request.Path), StatusCodes.Status409Conflict);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Unhandled Exception");
+                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, context.Request.Path), StatusCodes.Status500InternalServerError);
+            }
+        }
 
-
-                switch (context.Response.StatusCode)
-                {
-                    //Tratando apenas o 401 para que caso não seja autorizado, ele sempre vai retornar o padrão do sistema
-                    case StatusCodes.Status401Unauthorized:
-                        problemDetails = ProblemDetailsExampleFactory.ForUnauthorized("Usuário não Autorizado.", context.Request.Path);
-                        break;
-                }
-
-                if (!context.Response.HasStarted)
-                {
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
-                }
+        private async Task WriteProblemDetailsAsync(HttpContext context, ProblemDetails problemDetails, int statusCode)
+        {
+            if (!context.Response.HasStarted)
+            {
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = statusCode;
+                await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
             }
         }
     }

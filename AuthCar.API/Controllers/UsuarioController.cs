@@ -43,32 +43,9 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var result = await _mediator.Send(new ListUsuariosQuery());
-                var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
-                return Ok(successResponse);
-            }
-            catch (InvalidOperationException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-                return BadRequest(problemDetails);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-                return Unauthorized(problemDetails);
-            }
-            catch (ConflictException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-                return Conflict(problemDetails);
-            }
-            catch (Exception ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-                return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-            }
+            var result = await _mediator.Send(new ListUsuariosQuery());
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
         }
 
         /// <summary>
@@ -89,39 +66,16 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> GetByCodigo(Guid codigo)
         {
-            try
-            {
-                var result = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });
+            var result = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });
 
-                if (result == null)
-                {
-                    var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Usuário não encontrado.", HttpContext.Request.Path);
-                    return NotFound(notFoundDetails);
-                }
+            if (result == null)
+            {
+                var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Usuário não encontrado.", HttpContext.Request.Path);
+                return NotFound(notFoundDetails);
+            }
 
-                var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
-                return Ok(successResponse);
-            }
-            catch (InvalidOperationException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-                return BadRequest(problemDetails);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-                return Unauthorized(problemDetails);
-            }
-            catch (ConflictException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-                return Conflict(problemDetails);
-            }
-            catch (Exception ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-                return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-            }
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Requisição realizada com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
         }
 
         /// <summary>
@@ -143,39 +97,16 @@ namespace AuthCar.API.Controllers
             var validationResult = await ValidationHelper.ValidateEntityAsync(usuarioDto, serviceProvider, this);
             if (validationResult != null) return validationResult;
 
-            try
+            var command = new AddUsuarioCommand
             {
-                var command = new AddUsuarioCommand
-                {
-                    Nome = usuarioDto.Nome,
-                    Login = usuarioDto.Login,
-                    Senha = usuarioDto.Senha
-                };
+                Nome = usuarioDto.Nome,
+                Login = usuarioDto.Login,
+                Senha = usuarioDto.Senha
+            };
 
-                var usuario = await _mediator.Send(command);
-                var successResponse = SuccessResponseExampleFactory.ForSuccess(usuario, "Usuário criado com sucesso.", HttpContext.Request.Path);
-                return Ok(successResponse);
-            }
-            catch (InvalidOperationException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-                return BadRequest(problemDetails);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-                return Unauthorized(problemDetails);
-            }
-            catch (ConflictException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-                return Conflict(problemDetails);
-            }
-            catch (Exception ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-                return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-            }
+            var usuario = await _mediator.Send(command);
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(usuario, "Usuário criado com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
         }
 
         /// <summary>
@@ -199,40 +130,18 @@ namespace AuthCar.API.Controllers
             var validationResult = await ValidationHelper.ValidateEntityAsync(usuarioDto, serviceProvider, this);
             if (validationResult != null) return validationResult;
 
-            try
+            var command = new UpdateUsuarioCommand
             {
-                var command = new UpdateUsuarioCommand
-                {
-                    Codigo = codigo,
-                    Nome = usuarioDto.Nome,
-                    Login = usuarioDto.Login,
-                    Senha = usuarioDto.Senha
-                };
+                Codigo = codigo,
+                Nome = usuarioDto.Nome,
+                Login = usuarioDto.Login,
+                Senha = usuarioDto.Senha
+            };
 
-                var result = await _mediator.Send(command);
-                var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Usuário atualizado com sucesso.", HttpContext.Request.Path);
-                return Ok(successResponse);
-            }
-            catch (InvalidOperationException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-                return BadRequest(problemDetails);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-                return Unauthorized(problemDetails);
-            }
-            catch (ConflictException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-                return Conflict(problemDetails);
-            }
-            catch (Exception ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-                return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-            }
+            var result = await _mediator.Send(command);
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(result, "Usuário atualizado com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
+
         }
 
         /// <summary>
@@ -253,45 +162,22 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> Delete(Guid codigo)
         {
-            try
+            var existingUsuario = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });
+            if (existingUsuario == null)
             {
-                var existingUsuario = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });
-                if (existingUsuario == null)
-                {
-                    var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Usuário não encontrado.", HttpContext.Request.Path);
-                    return NotFound(notFoundDetails);
-                }
+                var notFoundDetails = ProblemDetailsExampleFactory.ForNotFound("Usuário não encontrado.", HttpContext.Request.Path);
+                return NotFound(notFoundDetails);
+            }
 
-                await _mediator.Send(new DeleteUsuarioCommand { Codigo = codigo });
+            await _mediator.Send(new DeleteUsuarioCommand { Codigo = codigo });
 
-                var successResponse = new SucessDetails
-                {
-                    Detail = "Usuário excluído com sucesso.",
-                    Data = existingUsuario,
-                };
+            var successResponse = new SucessDetails
+            {
+                Detail = "Usuário excluído com sucesso.",
+                Data = existingUsuario,
+            };
 
-                return Ok(successResponse);
-            }
-            catch (InvalidOperationException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-                return BadRequest(problemDetails);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-                return Unauthorized(problemDetails);
-            }
-            catch (ConflictException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-                return Conflict(problemDetails);
-            }
-            catch (Exception ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-                return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-            }
+            return Ok(successResponse);
         }
     }
 }

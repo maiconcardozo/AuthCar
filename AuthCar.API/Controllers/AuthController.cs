@@ -49,38 +49,16 @@ namespace AuthCar.API.Controllers
                 return validationResult;
             }
 
-            try
+            var command = new LoginCommand
             {
-                var command = new LoginCommand
-                {
-                    Login = authRequestDTO.Login,
-                    Senha = authRequestDTO.Senha
-                };
+                Login = authRequestDTO.Login,
+                Senha = authRequestDTO.Senha
+            };
 
-                var tokenDTO = await mediator.Send(command);
-                var successResponse = SuccessResponseExampleFactory.ForSuccess(tokenDTO, "Token gerado com sucesso.", HttpContext.Request.Path);
-                return Ok(successResponse);
-            }
-            catch (InvalidOperationException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForBadRequest(ex.Message, HttpContext.Request.Path);
-                return BadRequest(problemDetails);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, HttpContext.Request.Path);
-                return Unauthorized(problemDetails);
-            }
-            catch (ConflictException ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForConflict(ex.Message, HttpContext.Request.Path);
-                return Conflict(problemDetails);
-            }
-            catch (Exception ex)
-            {
-                var problemDetails = ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, HttpContext.Request.Path);
-                return StatusCode(StatusCodes.Status500InternalServerError, problemDetails);
-            }
+            var tokenDTO = await mediator.Send(command);
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(tokenDTO, "Token gerado com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
+
         }
     }
 }
