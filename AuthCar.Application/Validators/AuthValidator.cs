@@ -11,12 +11,12 @@ namespace AuthCar.Application.Validators
         public AuthValidator()
         {
             RuleFor(u => u.Login)
-                .NotEmpty()
-                .MinimumLength(3);
+                .NotEmpty().WithMessage("O login é obrigatório.")
+                .MinimumLength(3).WithMessage("O login deve ter no mínimo 3 caracteres.");
 
             RuleFor(u => u.Senha)
-                .NotEmpty()
-                .MinimumLength(6);
+                .NotEmpty().WithMessage("A senha é obrigatória.")
+                .MinimumLength(6).WithMessage("A senha deve ter no mínimo 6 caracteres.");
         }
     }
 }

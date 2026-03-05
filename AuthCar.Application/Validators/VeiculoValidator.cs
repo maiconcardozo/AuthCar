@@ -8,15 +8,15 @@ namespace AuthCar.Application.Validators
         public VeiculoValidator()
         {
             RuleFor(v => v.Descricao)
-                .NotEmpty()
-                .MaximumLength(100);
+                .NotEmpty().WithMessage("A descrição é obrigatória.")
+                .MaximumLength(100).WithMessage("A descrição deve ter no máximo 100 caracteres.");
 
             RuleFor(v => v.Marca)
-                .IsInEnum();
+                .IsInEnum().WithMessage("A marca é obrigatória e deve ser válida.");
 
             RuleFor(v => v.Modelo)
-                .NotEmpty()
-                .MaximumLength(30);
+                .NotEmpty().WithMessage("O modelo é obrigatório.")
+                .MaximumLength(30).WithMessage("O modelo deve ter no máximo 30 caracteres.");
         }
     }
 }
