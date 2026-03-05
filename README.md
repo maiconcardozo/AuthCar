@@ -88,13 +88,18 @@ A solução está dividida em camadas bem definidas:
 
 ---
 
+
 ## Tratativas de Erro
 
-- **Validações (FluentValidation)**: Retorna HTTP 400 com mensagens detalhadas.
-- **Falha de autenticação**: Retorna HTTP 401.
-- **Token ausente/inválido**: Retorna HTTP 401.
-- **Sem permissão (roles/claims, futuro)**: Retornaria HTTP 403.
-- **Exceções não tratadas**: Retorna ProblemDetails padronizado via `ExceptionHandlingMiddleware`.
+O projeto trata e retorna respostas padronizadas para os seguintes tipos de erro, além dos mínimos exigidos pela especificação:
+
+- **400 Bad Request:** Erros de validação (FluentValidation) ou requisições inválidas. Retorna mensagens detalhadas.
+- **401 Unauthorized:** Falha de autenticação ou token ausente/inválido. Retorna mensagem de acesso não autorizado.
+- **403 Forbidden:** Sem permissão (roles/claims, futuro). Retornaria acesso proibido.
+- **409 Conflict:** Situações de conflito, como cadastro duplicado ou violação de regras de negócio.
+- **500 Internal Server Error:** Exceções não tratadas, indicando erro interno do servidor.
+
+Todos esses erros são tratados pelo `ExceptionHandlingMiddleware` e retornam respostas padronizadas via `ProblemDetails`, garantindo clareza e padronização para o consumidor da API.
 
 ---
 
