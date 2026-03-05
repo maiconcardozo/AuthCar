@@ -4,6 +4,7 @@ using AuthCar.Domain.Entities;
 using AuthCar.Domain.Interface.Repository;
 using Authentication.Application.Mappers;
 using Authentication.Shared.Exceptions;
+using Foundation.Shared.Helpers;
 using MediatR;
 
 namespace AuthCar.Application.Handlers
@@ -27,7 +28,7 @@ namespace AuthCar.Application.Handlers
             {
                 Nome = request.Nome,
                 Login = request.Login,
-                Senha = request.Senha
+                Senha = StringHelper.ComputeArgon2Hash(request.Senha)
             };
 
             await _unitOfWork.UsuarioRepository.AddAsync(usuario);

@@ -150,8 +150,9 @@ public class VeiculoController : ControllerBase
                 Valor = veiculoDto.Valor
             };
 
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var usuario = await _mediator.Send(command);
+            var successResponse = SuccessResponseExampleFactory.ForSuccess(usuario, "Veículo criado com sucesso.", HttpContext.Request.Path);
+            return Ok(successResponse);
         }
         catch (InvalidOperationException ex)
         {

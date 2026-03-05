@@ -31,7 +31,8 @@
 		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.0" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.16.0" />
+		<PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -45,6 +46,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\AuthCar.Application\AuthCar.Application.csproj" />
 		<ProjectReference Include="..\AuthCar.Infrastructure\AuthCar.Infrastructure.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="Config\" />
 	</ItemGroup>
 
 </Project>

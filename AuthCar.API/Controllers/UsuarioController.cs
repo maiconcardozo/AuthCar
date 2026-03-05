@@ -2,7 +2,6 @@
 using AuthCar.Application.Commands.Usuario;
 using AuthCar.Application.DTOs;
 using AuthCar.Application.Queries;
-using AuthCar.Shared.Exceptions;
 using Authentication.Shared.Exceptions;
 using Foundation.Shared.Validations;
 using MediatR;
@@ -137,7 +136,7 @@ namespace AuthCar.API.Controllers
         [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
-        public async Task<IActionResult> AddUsuario([FromBody] UsuarioRequestDTO usuarioDto, [FromServices] IServiceProvider serviceProvider)
+        public async Task<IActionResult> Add([FromBody] UsuarioRequestDTO usuarioDto, [FromServices] IServiceProvider serviceProvider)
         {
             var validationResult = await ValidationHelper.ValidateEntityAsync(usuarioDto, serviceProvider, this);
             if (validationResult != null) return validationResult;
