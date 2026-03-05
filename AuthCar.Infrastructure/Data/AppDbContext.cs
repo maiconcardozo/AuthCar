@@ -24,15 +24,17 @@ namespace AuthCar.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new UsuarioMap());
             modelBuilder.ApplyConfiguration(new VeiculoMap());
 
-            // Seed de usuário admin
-            modelBuilder.Entity<Usuario>().HasData(new Usuario
-            {
-                Id = 1,
-                Codigo = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                Nome = "admin",
-                Login = "admin",
-                Senha = StringHelper.ComputeArgon2Hash("senha123")
-            });
+            modelBuilder.Entity<Usuario>().HasData(
+                new Usuario(
+                    "admin",
+                    "admin",
+                    "senha123"
+                )
+                {
+                    Id = 1,
+                    Codigo = Guid.Parse("00000000-0000-0000-0000-000000000001")
+                }
+            );
         }
     }
 }

@@ -24,12 +24,7 @@ namespace AuthCar.Application.Handlers
             if (existing != null)
                 throw new ConflictException("Este login de usuário já existe.");
 
-            var usuario = new Usuario
-            {
-                Nome = request.Nome,
-                Login = request.Login,
-                Senha = StringHelper.ComputeArgon2Hash(request.Senha)
-            };
+            var usuario = new Usuario(request.Nome, request.Login, request.Senha);
 
             await _unitOfWork.UsuarioRepository.AddAsync(usuario);
             await _unitOfWork.CommitAsync();

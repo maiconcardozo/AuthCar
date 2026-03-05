@@ -1,5 +1,6 @@
 ﻿using AuthCar.Application.Commands.Auth;
 using AuthCar.Application.DTOs.Auth;
+using AuthCar.Domain.Entities;
 using AuthCar.Domain.Interface.Repository;
 using AuthCar.Domain.Interfaces;
 using Foundation.Domain.Interfaces.Shared;
@@ -28,14 +29,14 @@ namespace AuthCar.Application.Handlers.Auth
 
         public async Task<AuthResponseDTO> Handle(AuthCommand request, CancellationToken cancellationToken)
         {
-            var usauario = await unitOfWork.UsuarioRepository.GetByLoginAsync(request.Login).ConfigureAwait(false);
+            var usuario = await unitOfWork.UsuarioRepository.GetByLoginAsync(request.Login).ConfigureAwait(false);
 
-            if (usauario == null)
+            if (usuario == null)
             {
                 throw new InvalidOperationException("Account not found");
             }
 
-            if (!StringHelper.VerifyArgon2Hash(request.Senha, usauario.Senha))
+            if (!usuario.ValidarSenha(request.Senha))
             {
                 throw new UnauthorizedAccessException("Invalid password");
             }
@@ -84,7 +85,7 @@ namespace AuthCar.Application.Handlers.Auth
                 Token = tokenString,
                 TokenType = "Bearer",
                 TempoExpiracao = remainingSeconds,
-                Login = usauario.Login,
+                Login = usuario.Login,
                 CriadoEm = DateTime.Now,
                 ExpiraEm = expiresAt,
             };

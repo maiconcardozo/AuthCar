@@ -23,9 +23,9 @@ namespace AuthCar.Application.Handlers
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 
-            usuario.Nome = request.Nome;
-            usuario.Login = request.Login;
-            usuario.Senha = StringHelper.ComputeArgon2Hash(request.Senha);
+            usuario.SetNome(request.Nome);
+            usuario.SetLogin(request.Login);
+            usuario.SetSenha(request.Senha);
 
             await _unitOfWork.UsuarioRepository.UpdateAsync(usuario);
             await _unitOfWork.CommitAsync();

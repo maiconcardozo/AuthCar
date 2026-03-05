@@ -18,13 +18,11 @@ namespace AuthCar.Application.Handlers
 
         public async Task<VeiculoResponseDTO> Handle(AddVeiculoCommand request, CancellationToken cancellationToken)
         {
-            var veiculo = new Veiculo
-            {
-                Descricao = request.Descricao,
-                Marca = request.Marca,
-                Modelo = request.Modelo,
-                Valor = request.Valor
-            };
+            var veiculo = new Veiculo(
+                   request.Descricao,
+                   request.Marca,
+                   request.Modelo,
+                   request.Valor);
 
             await _unitOfWork.VeiculoRepository.AddAsync(veiculo);
             await _unitOfWork.CommitAsync();

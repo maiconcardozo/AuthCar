@@ -22,10 +22,10 @@ namespace AuthCar.Application.Handlers
             if (veiculo == null)
                 throw new NotFoundException("Veículo não encontrado.");
 
-            veiculo.Descricao = request.Descricao;
-            veiculo.Marca = request.Marca;
-            veiculo.Modelo = request.Modelo;
-            veiculo.Valor = request.Valor;
+            veiculo.SetDescricao(request.Descricao);
+            veiculo.SetMarca(request.Marca);
+            veiculo.SetModelo(request.Modelo);
+            veiculo.SetValor(request.Valor);
 
             await _unitOfWork.VeiculoRepository.UpdateAsync(veiculo);
             await _unitOfWork.CommitAsync();
