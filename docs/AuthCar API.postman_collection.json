@@ -1,0 +1,395 @@
+{
+  "info": {
+    "_postman_id": "550a1e3e-1a45-4ff0-b77c-48b0790bbc0e",
+    "name": "AuthCar API",
+    "description": "Coleção organizada para testar endpoints protegidos e públicos da AuthCar API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9840443"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Gerar Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "",
+                  "if (jsonData && jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('bearerToken', jsonData.data.token);",
+                  "    console.log('✅ Token capturado e salvo com sucesso!');",
+                  "    console.log('🔑 Token:', jsonData.data.token);",
+                  "    console.log('👤 Login:', jsonData.data.login);",
+                  "    console.log('⏱️ Expira em:', jsonData.data.expiraEm);",
+                  "} else {",
+                  "    console.error('❌ Falha ao capturar o token. Verifique a resposta da API.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"{{login}}\",\n  \"senha\": \"{{senha}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Auth/GerarToken",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Auth",
+                "GerarToken"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "Get All Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Usuario/GetAllUsuario",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Usuario",
+                "GetAllUsuario"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Usuario By Codigo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Usuario/GetUsuarioByCodigo/{{codigo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Usuario",
+                "GetUsuarioByCodigo",
+                "{{codigo}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{nome}}\",\n  \"login\": \"{{login}}\",\n  \"senha\": \"{{senha}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Usuario/AddUsuario",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Usuario",
+                "AddUsuario"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{nome}}\",\n  \"login\": \"{{login}}\",\n  \"senha\": \"{{senha}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Usuario/UpdateUsuario/{{codigo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Usuario",
+                "UpdateUsuario",
+                "{{codigo}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Usuario/DeleteUsuario/{{codigo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Usuario",
+                "DeleteUsuario",
+                "{{codigo}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Veiculo",
+      "item": [
+        {
+          "name": "Get All Veiculo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Veiculo/GetAllVeiculo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Veiculo",
+                "GetAllVeiculo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Veiculo By Codigo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Veiculo/GetVeiculoByCodigo/{{codigo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Veiculo",
+                "GetVeiculoByCodigo",
+                "{{codigo}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Veiculo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"{{descricao}}\",\n  \"marca\": {{marca}},\n  \"modelo\": \"{{modelo}}\",\n  \"valor\": {{valor}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Veiculo/AddVeiculo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Veiculo",
+                "AddVeiculo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Veiculo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"{{descricao}}\",\n  \"marca\": {{marca}},\n  \"modelo\": \"{{modelo}}\",\n  \"valor\": {{valor}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Veiculo/UpdateVeiculo/{{codigo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Veiculo",
+                "UpdateVeiculo",
+                "{{codigo}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Veiculo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bearerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/AuthCar/Veiculo/DeleteVeiculo/{{codigo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "AuthCar",
+                "Veiculo",
+                "DeleteVeiculo",
+                "{{codigo}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7070"
+    },
+    {
+      "key": "bearerToken",
+      "value": ""
+    },
+    {
+      "key": "login",
+      "value": "admin"
+    },
+    {
+      "key": "senha",
+      "value": ""
+    },
+    {
+      "key": "codigo",
+      "value": ""
+    },
+    {
+      "key": "nome",
+      "value": ""
+    },
+    {
+      "key": "descricao",
+      "value": ""
+    },
+    {
+      "key": "marca",
+      "value": ""
+    },
+    {
+      "key": "modelo",
+      "value": ""
+    },
+    {
+      "key": "valor",
+      "value": ""
+    }
+  ]
+}
