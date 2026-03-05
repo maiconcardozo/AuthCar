@@ -25,23 +25,51 @@ namespace AuthCar.API.Middleware
             }
             catch (InvalidOperationException ex)
             {
-                logger.LogError(ex, "BadRequest Exception");
-                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForBadRequest(ex.Message, context.Request.Path), StatusCodes.Status400BadRequest);
+                logger.LogError(ex, "Exceção de Requisição Inválida");
+                await WriteProblemDetailsAsync(
+                    context,
+                    ProblemDetailsExampleFactory.ForBadRequest(
+                        $"Requisição inválida: {ex.Message}",
+                        context.Request.Path
+                    ),
+                    StatusCodes.Status400BadRequest
+                );
             }
             catch (UnauthorizedAccessException ex)
             {
-                logger.LogError(ex, "Unauthorized Exception");
-                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForUnauthorized(ex.Message, context.Request.Path), StatusCodes.Status401Unauthorized);
+                logger.LogError(ex, "Exceção de Não Autorizado");
+                await WriteProblemDetailsAsync(
+                    context,
+                    ProblemDetailsExampleFactory.ForUnauthorized(
+                        $"Acesso não autorizado: {ex.Message}",
+                        context.Request.Path
+                    ),
+                    StatusCodes.Status401Unauthorized
+                );
             }
             catch (ConflictException ex)
             {
-                logger.LogError(ex, "Conflict Exception");
-                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForConflict(ex.Message, context.Request.Path), StatusCodes.Status409Conflict);
+                logger.LogError(ex, "Exceção de Conflito");
+                await WriteProblemDetailsAsync(
+                    context,
+                    ProblemDetailsExampleFactory.ForConflict(
+                        $"Conflito: {ex.Message}",
+                        context.Request.Path
+                    ),
+                    StatusCodes.Status409Conflict
+                );
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Unhandled Exception");
-                await WriteProblemDetailsAsync(context, ProblemDetailsExampleFactory.ForInternalServerError(ex.Message, context.Request.Path), StatusCodes.Status500InternalServerError);
+                logger.LogError(ex, "Exceção não tratada");
+                await WriteProblemDetailsAsync(
+                    context,
+                    ProblemDetailsExampleFactory.ForInternalServerError(
+                        $"Erro interno do servidor: {ex.Message}",
+                        context.Request.Path
+                    ),
+                    StatusCodes.Status500InternalServerError
+                );
             }
         }
 
