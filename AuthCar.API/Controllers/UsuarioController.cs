@@ -71,7 +71,7 @@ namespace AuthCar.API.Controllers
         }
 
         /// <summary>
-        /// Retorna um usuário pelo Id
+        /// Retorna um usuário pelo Código
         /// </summary>
         [HttpGet("GetUsuarioByCodigo/{codigo}")]
         [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UsuarioResponseDTO))]
