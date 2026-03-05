@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 
+using Microsoft.AspNetCore.Authorization;
 /// <summary>
 /// Operações relacionadas ao veículo
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("AuthCar/[controller]")]
 public class VeiculoController : ControllerBase

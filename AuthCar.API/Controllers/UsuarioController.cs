@@ -5,6 +5,7 @@ using AuthCar.Application.Queries;
 using AuthCar.Shared.Exceptions;
 using Foundation.Shared.Validations;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
@@ -14,6 +15,7 @@ namespace AuthCar.API.Controllers
     /// <summary>
     /// Operações relacionadas ao usuário
     /// </summary>
+    [Authorize]
     [ApiController]
     [Route("AuthCar/[controller]")]
     public class UsuarioController : ControllerBase

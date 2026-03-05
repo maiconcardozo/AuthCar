@@ -1,19 +1,17 @@
-﻿using AuthCar.API.Swagger;
+﻿using AuthCar.API.Middleware;
+using AuthCar.API.Swagger;
 using AuthCar.Application.DTOs;
 using AuthCar.Application.DTOs.Auth;
 using AuthCar.Application.Validators;
 using AuthCar.Domain.Entities;
-using AuthCar.Domain.Interface.Application;
 using AuthCar.Domain.Interface.Repository;
 using AuthCar.Domain.Interfaces;
 using AuthCar.Infrastructure.Data;
 using AuthCar.Infrastructure.Repositories;
 using FluentValidation;
-using Foundation.Domain.Interfaces.Shared;
-using Foundation.Infrastructure.Services.Redis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Filters;
 using System.Globalization;
 using System.Reflection;
@@ -100,6 +98,34 @@ namespace AuthCar.API
             services.AddTransient<IValidator<AuthRequestDTO>, AuthValidator>();
 
             // =========================================
+            // AUTENTICAÇÃO JWT
+            // =========================================
+            var issuer = jwtSection["Issuer"];
+            var audience = jwtSection["Audience"];
+            var secretKey = jwtSection["SecretKey"];
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
+
+            services.AddAuthorization();
+
+            // =========================================
             // CONTROLLERS
             // =========================================
             services.AddControllers();
@@ -119,21 +145,21 @@ namespace AuthCar.API
                 options.EnableAnnotations();
                 options.ExampleFilters();
 
-                options.SwaggerDoc("auth", new OpenApiInfo
+                options.SwaggerDoc("auth", new Microsoft.OpenApi.OpenApiInfo
                 {
                     Title = "Autenticação API",
                     Version = "v1",
                     Description = "Endpoints relacionados à autenticação"
                 });
 
-                options.SwaggerDoc("usuarios", new OpenApiInfo
+                options.SwaggerDoc("usuarios", new Microsoft.OpenApi.OpenApiInfo
                 {
                     Title = "Usuários API",
                     Version = "v1",
                     Description = "Endpoints relacionados a usuários"
                 });
 
-                options.SwaggerDoc("veiculos", new OpenApiInfo
+                options.SwaggerDoc("veiculos", new Microsoft.OpenApi.OpenApiInfo
                 {
                     Title = "Veículos API",
                     Version = "v1",
@@ -161,6 +187,15 @@ namespace AuthCar.API
         {
 
             // =========================================
+            // SEED DO BANCO IN-MEMORY
+            // =========================================
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.EnsureCreated();
+            }
+
+            // =========================================
             // MIDDLEWARES
             // =========================================
 
@@ -173,8 +208,12 @@ namespace AuthCar.API
                 c.SwaggerEndpoint("/swagger/veiculos/swagger.json", "Veículos API");
                 c.RoutePrefix = string.Empty;
             });
+
+
+
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseStaticFiles();
 
