@@ -1,4 +1,4 @@
-﻿namespace Authentication.Shared.Exceptions
+﻿namespace AuthCar.Shared.Exceptions
 {
     public class ConflictException : Exception
     {

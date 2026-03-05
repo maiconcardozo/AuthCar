@@ -2,7 +2,7 @@
 using AuthCar.Application.Queries;
 using AuthCar.Domain.Interface.Repository;
 using AuthCar.Shared.Exceptions;
-using Authentication.Application.Mappers;
+using AuthCar.Application.Mappers;
 using MediatR;
 
 namespace AuthCar.Application.Handlers
@@ -22,7 +22,7 @@ namespace AuthCar.Application.Handlers
             if (usuario == null)
                 throw new NotFoundException("Usuário não encontrado.");
 
-            return AuthenticationLoginProfileMapperInitializer.Mapper.Map<UsuarioResponseDTO>(usuario);
+            return AuthLoginProfileMapperInitializer.Mapper.Map<UsuarioResponseDTO>(usuario);
         }
     }
 }

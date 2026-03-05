@@ -1,7 +1,7 @@
 ﻿using AuthCar.Application.DTOs;
 using AuthCar.Application.Queries;
 using AuthCar.Domain.Interface.Repository;
-using Authentication.Application.Mappers;
+using AuthCar.Application.Mappers;
 using MediatR;
 
 namespace AuthCar.Application.Handlers
@@ -18,7 +18,7 @@ namespace AuthCar.Application.Handlers
         public async Task<IEnumerable<VeiculoResponseDTO>> Handle(ListVeiculosQuery request, CancellationToken cancellationToken)
         {
             var veiculos = await _unitOfWork.VeiculoRepository.ListAsync();
-            return AuthenticationLoginProfileMapperInitializer.Mapper.Map<IEnumerable<VeiculoResponseDTO>>(veiculos);
+            return AuthLoginProfileMapperInitializer.Mapper.Map<IEnumerable<VeiculoResponseDTO>>(veiculos);
         }
     }
 }

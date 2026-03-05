@@ -1,10 +1,9 @@
-﻿using AuthCar.Application.Mappers;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Authentication.Application.Mappers
+namespace AuthCar.Application.Mappers
 {
-    public static class AuthenticationLoginProfileMapperInitializer
+    public static class AuthLoginProfileMapperInitializer
     {
         private static readonly Lazy<IMapper> MapperLazy = new Lazy<IMapper>(() =>
         {

@@ -2,7 +2,7 @@
 using AuthCar.Application.DTOs;
 using AuthCar.Domain.Entities;
 using AuthCar.Domain.Interface.Repository;
-using Authentication.Application.Mappers;
+using AuthCar.Application.Mappers;
 using MediatR;
 
 namespace AuthCar.Application.Handlers
@@ -35,7 +35,7 @@ namespace AuthCar.Application.Handlers
             //    await _unitOfWork.VeiculoRepository.AddAsync(veiculo);
             //});
 
-            return AuthenticationLoginProfileMapperInitializer.Mapper.Map<VeiculoResponseDTO>(veiculo);
+            return AuthLoginProfileMapperInitializer.Mapper.Map<VeiculoResponseDTO>(veiculo);
         }
     }
 }

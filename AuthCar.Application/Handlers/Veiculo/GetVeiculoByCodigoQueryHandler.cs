@@ -2,7 +2,7 @@
 using AuthCar.Application.Queries;
 using AuthCar.Domain.Interface.Repository;
 using AuthCar.Shared.Exceptions;
-using Authentication.Application.Mappers;
+using AuthCar.Application.Mappers;
 using MediatR;
 
 namespace AuthCar.Application.Handlers
@@ -22,7 +22,7 @@ namespace AuthCar.Application.Handlers
             if (veiculo == null)
                 throw new NotFoundException("Veículo não encontrado.");
 
-            return AuthenticationLoginProfileMapperInitializer.Mapper.Map<VeiculoResponseDTO>(veiculo);
+            return AuthLoginProfileMapperInitializer.Mapper.Map<VeiculoResponseDTO>(veiculo);
         }
     }
 }

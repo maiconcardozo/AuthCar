@@ -2,7 +2,7 @@
 using AuthCar.Application.Commands.Usuario;
 using AuthCar.Application.DTOs;
 using AuthCar.Application.Queries;
-using Authentication.Shared.Exceptions;
+using AuthCar.Shared.Exceptions;
 using Foundation.Shared.Validations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
