@@ -82,8 +82,6 @@ A solução está dividida em camadas bem definidas:
 
 - **Hash de senha com Argon2**: Mais seguro que BCrypt.
 - **Seed de usuário admin**: Usuário admin criado automaticamente na inicialização.
-- **Tratamento global de erros**: Middleware customizado (`ExceptionHandlingMiddleware`) que retorna respostas padronizadas (ProblemDetails) para erros de validação, autenticação, autorização e exceções não tratadas.
-- **Estrutura adaptada para roles/claims**: O JWT está preparado para receber claims/roles, mas a feature não foi implementada por questão de tempo. O projeto está estruturado para fácil inclusão futura.
 - **Arquivo `.env` para dados sensíveis**: Configurações como chaves secretas do JWT podem ser armazenadas em `.env` dentro da pasta `Config`, que está no `.gitignore` para evitar exposição de informações sensíveis.
 
 ---
