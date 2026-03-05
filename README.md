@@ -261,9 +261,20 @@ AuthCar/
 
 ---
 
+
 ## Observações sobre Claims/Roles
 
 > **Trade-off:** A feature de roles/claims no JWT não foi implementada devido ao tempo limitado para testes e validação. Optei por estruturar o projeto de forma robusta e adaptada para fácil inclusão dessa funcionalidade no futuro, priorizando qualidade e organização do código.
+
+---
+
+## Possíveis Evoluções: Claims/Roles e Soft Delete
+
+**Claims/Roles no JWT:**
+Para adicionar controle de acesso por perfil (roles) e claims, basta incluir as informações de perfil do usuário (ex: `role: admin`, `role: user`) no token JWT gerado durante o login. Os endpoints protegidos podem ser configurados para exigir determinados roles usando `[Authorize(Roles = "Admin")]` ou validação customizada. A estrutura do projeto já está adaptada para receber claims/roles, bastando implementar a lógica de atribuição e validação conforme a necessidade.
+
+**Soft Delete:**
+Para implementar soft delete nas entidades, basta adicionar um campo como `IsDeleted` (boolean) ou `DeletedAt` (DateTime?) nas entidades do domínio. Ao invés de remover o registro do banco, basta marcar o campo como verdadeiro ou preencher a data de exclusão. Os repositórios e queries devem ser ajustados para filtrar apenas registros não excluídos (`IsDeleted == false`). Essa abordagem preserva o histórico e facilita auditoria, sem perder dados importantes.
 
 ---
 
