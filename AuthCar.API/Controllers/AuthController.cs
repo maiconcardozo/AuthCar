@@ -31,16 +31,6 @@ namespace AuthCar.API.Controllers
         /// </summary>
         [AllowAnonymous]
         [HttpPost("GerarToken")]
-        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<UsuarioResponseDTO>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> GerarToken([FromBody] AuthRequestDTO authRequestDTO, [FromServices] IServiceProvider serviceProvider)
         {
             var validationResult = await ValidationHelper.ValidateEntityAsync(authRequestDTO, serviceProvider, this);

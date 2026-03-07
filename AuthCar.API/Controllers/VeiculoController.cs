@@ -29,16 +29,6 @@ public class VeiculoController : ControllerBase
     /// Retorna todos os veículos cadastrados
     /// </summary>
     [HttpGet("GetAllVeiculo")]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<VeiculoResponseDTO>))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> GetAllVeiculo()
     {
         var result = await _mediator.Send(new ListVeiculosQuery());
@@ -50,18 +40,6 @@ public class VeiculoController : ControllerBase
     /// Retorna um veículo pelo Codigo
     /// </summary>
     [HttpGet("GetVeiculoByCodigo/{codigo}")]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(VeiculoResponseDTO))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
-    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> GetByCodigo(Guid codigo)
     {
         var result = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });
@@ -80,16 +58,6 @@ public class VeiculoController : ControllerBase
     /// Adiciona um novo veículo
     /// </summary>
     [HttpPost("AddVeiculo")]
-    [SwaggerResponse(StatusCodes.Status201Created, Type = typeof(VeiculoResponseDTO))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-    [SwaggerResponseExample(StatusCodes.Status201Created, typeof(SucessDetailsExample))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> Add([FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
     {
         var validationResult = await ValidationHelper.ValidateEntityAsync(veiculoDto, serviceProvider, this);
@@ -113,18 +81,6 @@ public class VeiculoController : ControllerBase
     /// Atualiza um veículo existente
     /// </summary>
     [HttpPut("UpdateVeiculo/{codigo}")]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(VeiculoResponseDTO))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
-    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> Update(Guid codigo, [FromBody] VeiculoRequestDTO veiculoDto, [FromServices] IServiceProvider serviceProvider)
     {
         var validationResult = await ValidationHelper.ValidateEntityAsync(veiculoDto, serviceProvider, this);
@@ -149,18 +105,6 @@ public class VeiculoController : ControllerBase
     /// Exclui um veículo
     /// </summary>
     [HttpDelete("DeleteVeiculo/{codigo}")]
-    [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(SucessDetails))]
-    [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-    [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
-    [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-    [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
     public async Task<IActionResult> Delete(Guid codigo)
     {
         var existingVeiculo = await _mediator.Send(new GetVeiculoByCodigoQuery { Codigo = codigo });

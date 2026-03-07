@@ -31,16 +31,6 @@ namespace AuthCar.API.Controllers
         /// Retorna todos os usuários cadastrados
         /// </summary>
         [HttpGet("GetAllUsuario")]
-        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(IEnumerable<UsuarioResponseDTO>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new ListUsuariosQuery());
@@ -52,18 +42,6 @@ namespace AuthCar.API.Controllers
         /// Retorna um usuário pelo Código
         /// </summary>
         [HttpGet("GetUsuarioByCodigo/{codigo}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UsuarioResponseDTO))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-        [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
-        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> GetByCodigo(Guid codigo)
         {
             var result = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });
@@ -82,16 +60,6 @@ namespace AuthCar.API.Controllers
         /// Adiciona um novo usuário
         /// </summary>
         [HttpPost("AddUsuario")]
-        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UsuarioResponseDTO))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> Add([FromBody] UsuarioRequestDTO usuarioDto, [FromServices] IServiceProvider serviceProvider)
         {
             var validationResult = await ValidationHelper.ValidateEntityAsync(usuarioDto, serviceProvider, this);
@@ -113,17 +81,6 @@ namespace AuthCar.API.Controllers
         /// Atualiza um usuário existente
         /// </summary>
         [HttpPut("UpdateUsuario/{codigo}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(UsuarioResponseDTO))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-        [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
-        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> Update(Guid codigo, [FromBody] UsuarioRequestDTO usuarioDto, [FromServices] IServiceProvider serviceProvider)
         {
@@ -148,18 +105,6 @@ namespace AuthCar.API.Controllers
         /// Exclui um usuário
         /// </summary>
         [HttpDelete("DeleteUsuario/{codigo}")]
-        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(SucessDetails))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status409Conflict, Type = typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SucessDetailsExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ProblemDetailsBadRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(ProblemDetailsUnauthorizedExample))]
-        [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(ProblemDetailsNotFoundExample))]
-        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ProblemDetailsConflictExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ProblemDetailsInternalServerErrorExample))]
         public async Task<IActionResult> Delete(Guid codigo)
         {
             var existingUsuario = await _mediator.Send(new GetUsuarioByCodigoQuery { Codigo = codigo });

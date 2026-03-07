@@ -4,7 +4,7 @@ namespace AuthCar.API.Swagger
 {
     internal static class SuccessResponseExampleFactory
     {
-        public static SucessDetails ForSuccess(object? data, string? detail = null, string instance = "/example/instance")
+        public static SucessDetails ForSuccess(object? data, string? detail = null, string instance = "/exemplo/instancia")
         {
             return new SucessDetails
             {
@@ -20,10 +20,27 @@ namespace AuthCar.API.Swagger
 
     internal class SucessDetailsExample : IExamplesProvider<SucessDetails>
     {
-        public SucessDetails GetExamples() =>
-            SuccessResponseExampleFactory.ForSuccess(
-                new { UserId = 123, UserName = "example.example", Email = "example.example@example.com" },
-                "Requisicão foi feita com sucesso!",
-                "/example/instance");
+        public SucessDetails GetExamples()
+        {
+            return SuccessResponseExampleFactory.ForSuccess(
+                 new
+                 {
+                     Id = 9999,
+                     Codigo = Guid.NewGuid(),
+                     IsActive = true,
+                     DtCreated = DateTime.UtcNow,
+                     CreatedBy = "UsuárioGenérico",
+                     DtUpdated = DateTime.Now,
+                     DtDeleted = DateTime.Now,
+                     UpdatedBy = "UsuárioGenérico",
+                     DeletedBy = "UsuárioGenérico",
+                     LstId = new List<int> { 123, 456, 789 },
+                     DtCreatedStart = DateTime.Now,
+                     DtCreatedEnd = DateTime.Now,
+                     AdditionalInfo = "Documentação de objeto genérico",
+                 },
+                 "A solicitação foi realizada com sucesso.",
+                 "/exemplo/instancia");
+        }
     }
 }

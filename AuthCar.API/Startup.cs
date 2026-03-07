@@ -132,6 +132,8 @@ namespace AuthCar.API
                 options.EnableAnnotations();
                 options.ExampleFilters();
 
+                options.OperationFilter<StandardResponsesOperationFilter>();
+
                 options.SwaggerDoc("auth", new Microsoft.OpenApi.OpenApiInfo
                 {
                     Title = "Autenticação API",
